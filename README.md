@@ -31,5 +31,6 @@
 ### ③在黑名单管理界面可以进行手动添加、删除（**长按列表中的用户名**）操作。
 
 ## 鸣谢
+* [Xposed](https://github.com/rovo89/Xposed)
 * [LSPosed](https://github.com/LSPosed/LSPosed)
 * [MultiprocessSharedPreferences](https://github.com/seven456/MultiprocessSharedPreferences)
