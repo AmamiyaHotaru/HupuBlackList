@@ -14,7 +14,22 @@
 - [ ] 隐藏拉黑用户的专区回复
 - [ ] 隐藏拉黑用户的首页推荐
 
-## 使用方法
-## :warning: 未ROOT用户使用需要卸载旧的虎扑 :warning:
+## 安装
+### :warning: 未ROOT用户使用需要卸载旧的虎扑 :warning:
 ### 1.下载模块自行安装或修补
 ### 2.使用修补好的虎扑安装包
+
+## 使用
+### ①进入需要加入黑名单用户的资料页面，点击用户名，弹出拉黑提示，拉黑用户字体颜色为红色，再次点击则取消拉黑。
+
+<img src="https://github.com/AmamiyaHotaru/HupuBlackList/blob/main/img/Screenshot_20240409_183445.jpg" alt="Image text" width="50%" />
+
+### ②点击“我的”导航栏右上角的设置按钮，进入设置界面，点击“黑名单”菜单项进入黑名单管理界面。
+
+<img src="https://github.com/AmamiyaHotaru/HupuBlackList/blob/main/img/Screenshot_20240409_183459.jpg" alt="Image text" width="50%" />
+
+### ③在黑名单管理界面可以进行手动添加、删除（**长按列表中的用户名**）操作。
+
+## 鸣谢
+* [LSPosed](https://github.com/LSPosed/LSPosed)
+* [MultiprocessSharedPreferences](https://github.com/seven456/MultiprocessSharedPreferences)
