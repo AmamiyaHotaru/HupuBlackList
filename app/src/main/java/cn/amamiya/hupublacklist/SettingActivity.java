@@ -112,7 +112,6 @@ public class SettingActivity extends AppCompatActivity implements MyAdapter.OnIt
     @Override
     protected void onPause() {
         super.onPause();
-        finish();
     }
 
     @SuppressLint("NotifyDataSetChanged")

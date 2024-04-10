@@ -7,7 +7,8 @@ public class Hooks {
     static final IHook[] hooks = {
             new TopicList(),
             new Personal(),
-            new Setup()
+            new Setup(),
+            new PostDetail()
     };
 
     public static void init(ClassLoader classLoader){
