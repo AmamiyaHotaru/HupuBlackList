@@ -13,7 +13,7 @@
 
 ## 已实现功能
 - [x] 隐藏拉黑用户的专区发帖
-- [ ] 折叠拉黑用户的专区回复
+- [x] 折叠拉黑用户的专区回复
 - [ ] 隐藏拉黑用户的首页推荐
 
 ## 安装
@@ -30,9 +30,10 @@
 
 <img src="https://github.com/AmamiyaHotaru/HupuBlackList/blob/main/img/Screenshot_20240409_183459.jpg" alt="Image text" width="50%" />
 
-### ③在黑名单管理界面可以进行手动添加、删除（**长按列表中的用户名**）操作。
+### ③在黑名单管理界面长按可以对黑名单进行删除操作。
+
+<img src="https://github.com/AmamiyaHotaru/HupuBlackList/blob/main/img/Screenshot_20240411_190041.jpg" alt="Image text" width="50%" />
 
 ## 鸣谢
 * [Xposed](https://github.com/rovo89/Xposed)
 * [LSPosed](https://github.com/LSPosed/LSPosed)
-* [MultiprocessSharedPreferences](https://github.com/seven456/MultiprocessSharedPreferences)
