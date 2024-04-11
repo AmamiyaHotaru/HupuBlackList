@@ -50,7 +50,8 @@ public class Setup implements IHook{
 
                         SharedPreferences sharedPreferences = setupActivity.getSharedPreferences("blockusers", Context.MODE_PRIVATE);
                         String blockUsersString = sharedPreferences.getString("blockusers", "");
-                        List<String> list = new ArrayList<>(Arrays.asList(blockUsersString.split(",")));
+
+                        List<String> list = blockUsersString.isEmpty()?new ArrayList<>():new ArrayList<>(Arrays.asList(blockUsersString.split(",")));
 
                         setupSingleView1.setOnClickListener(new View.OnClickListener() {
                             @Override

@@ -48,7 +48,7 @@ public class Personal implements IHook{
 
                         SharedPreferences sharedPreferences = personalActivity.getSharedPreferences("blockusers", Context.MODE_PRIVATE);
                         String blockUsersString = sharedPreferences.getString("blockusers", "");
-                        List<String> list = new ArrayList<>(Arrays.asList(blockUsersString.split(",")));
+                        List<String> list = blockUsersString.isEmpty()?new ArrayList<>():new ArrayList<>(Arrays.asList(blockUsersString.split(",")));
 
                         XposedBridge.log("[HPBlack] listString"+blockUsersString);
 
