@@ -3,27 +3,18 @@ package cn.amamiya.hupublacklist.hooks;
 import static android.content.Context.MODE_PRIVATE;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.XResources;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.widget.TextView;
-
-import androidx.annotation.IdRes;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import cn.amamiya.hupublacklist.utils.MultiprocessSharedPreferences;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -46,11 +37,10 @@ public class PostDetail implements IHook {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         super.afterHookedMethod(param);
-                        MultiprocessSharedPreferences.setAuthority("cn.amamiya.hupublacklist.provider");
                         Activity thisObject = (Activity) param.thisObject;
-                        SharedPreferences pref = MultiprocessSharedPreferences.getSharedPreferences(thisObject, "blacklist", MODE_PRIVATE);
-                        String listString = pref.getString("blacklist", "");
-                        Set<String> blacklist = new HashSet<>(Arrays.asList(listString.split(",")));
+                        SharedPreferences sharedPreferences = thisObject.getSharedPreferences("blockusers", Context.MODE_PRIVATE);
+                        String blockUsersString = sharedPreferences.getString("blockusers", "");
+                        List<String> list = new ArrayList<>(Arrays.asList(blockUsersString.split(",")));
 
                         findAndHookMethod("com.hupu.android.bbs.replylist.BBSPostReplyPackageEntity",
                                 classLoader,
@@ -70,7 +60,7 @@ public class PostDetail implements IHook {
                                         nicknameField.setAccessible(true);
                                         String nickname = (String) nicknameField.get(authorEntity);
 
-                                        if (blacklist.contains(nickname)){
+                                        if (list.contains(nickname)){
                                             param.args[0] = true;
                                         }
                                     }

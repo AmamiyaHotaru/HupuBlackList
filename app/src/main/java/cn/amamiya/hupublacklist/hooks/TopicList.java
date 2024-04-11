@@ -4,25 +4,22 @@ import static android.content.Context.MODE_PRIVATE;
 import static de.robv.android.xposed.XposedHelpers.findAndHookMethod;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.FragmentActivity;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import cn.amamiya.hupublacklist.utils.MultiprocessSharedPreferences;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 public class TopicList implements IHook{
 
@@ -47,14 +44,15 @@ public class TopicList implements IHook{
                         Field activityField = topicListDispatcher.getClass().getDeclaredField("activity");
                         activityField.setAccessible(true);
                         Activity activity = (Activity) activityField.get(topicListDispatcher);
-                        MultiprocessSharedPreferences.setAuthority("cn.amamiya.hupublacklist.provider");
-                        SharedPreferences pref = MultiprocessSharedPreferences.getSharedPreferences(activity, "blacklist", MODE_PRIVATE);
-                        String listString = pref.getString("blacklist", "");
-                        Set<String> blacklist = new HashSet<>(Arrays.asList(listString.split(",")));
+
+                        SharedPreferences sharedPreferences = activity.getSharedPreferences("blockusers", Context.MODE_PRIVATE);
+                        String blockUsersString = sharedPreferences.getString("blockusers", "");
+                        List<String> list = new ArrayList<>(Arrays.asList(blockUsersString.split(",")));
+
                         Class<?> aClass = param.args[0].getClass();
                         Method getNickname = aClass.getMethod("component22");
                         String userName = (String) getNickname.invoke(param.args[0]);
-                        if (blacklist.contains(userName)){
+                        if (list.contains(userName)){
                                 // 获取 itemView
                                 View itemView = (View) XposedHelpers.getObjectField(param.thisObject, "itemView");
                                 // 隐藏
