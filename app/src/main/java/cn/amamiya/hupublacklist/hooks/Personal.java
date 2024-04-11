@@ -11,30 +11,20 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-import org.json.JSONObject;
-
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import cn.amamiya.hupublacklist.SettingActivity;
-import cn.amamiya.hupublacklist.utils.MultiprocessSharedPreferences;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
-import kotlin.Result;
 
 
 public class Personal implements IHook{
@@ -55,16 +45,12 @@ public class Personal implements IHook{
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         Activity personalActivity = (Activity) param.thisObject;
 
-                        MultiprocessSharedPreferences.setAuthority("cn.amamiya.hupublacklist.provider");
-                        SharedPreferences pref = MultiprocessSharedPreferences.getSharedPreferences(personalActivity, "blacklist", MODE_PRIVATE);
-                        String listString = pref.getString("blacklist", "");
-                        Set<String> blacklist;
-                        if (listString.isEmpty()) {
-                            blacklist = new HashSet<>();
-                        } else {
-                            blacklist = new HashSet<>(Arrays.asList(listString.split(",")));
-                        }
-                        XposedBridge.log("[HPBlack] listString"+listString);
+
+                        SharedPreferences sharedPreferences = personalActivity.getSharedPreferences("blockusers", Context.MODE_PRIVATE);
+                        String blockUsersString = sharedPreferences.getString("blockusers", "");
+                        List<String> list = new ArrayList<>(Arrays.asList(blockUsersString.split(",")));
+
+                        XposedBridge.log("[HPBlack] listString"+blockUsersString);
 
                         int textResourceId = personalActivity.getResources().getIdentifier("tv_name", "id", personalActivity.getPackageName());
                         TextView textView = personalActivity.findViewById(textResourceId);
@@ -74,7 +60,7 @@ public class Personal implements IHook{
                         String userName = (String) getNickname.invoke(param.args[0]);
                         XposedBridge.log("[HPBlack]userName="+userName);
 
-                        if (blacklist.contains(userName)) {
+                        if (list.contains(userName)) {
                             textView.setTextColor(Color.RED);
                         }
 
@@ -88,13 +74,13 @@ public class Personal implements IHook{
                                             public void onClick(DialogInterface dialog, int which) {
                                                 if (textView.getCurrentTextColor() == Color.RED) {
                                                     XposedBridge.log(userName + " 被取消拉黑");
-                                                    blacklist.remove(userName);
-                                                    pref.edit().putString("blacklist",String.join(",", blacklist)).apply();
+                                                    list.remove(userName);
+                                                    sharedPreferences.edit().putString("blockusers",String.join(",",list)).apply();
                                                     textView.setTextColor(Color.BLACK);
                                                 } else {
                                                     XposedBridge.log(userName+" 被拉黑");
-                                                    blacklist.add(userName);
-                                                    pref.edit().putString("blacklist",String.join(",", blacklist)).apply();
+                                                    list.add(userName);
+                                                    sharedPreferences.edit().putString("blockusers",String.join(",",list)).apply();
                                                     textView.setTextColor(Color.RED);
                                                 }
                                             }
