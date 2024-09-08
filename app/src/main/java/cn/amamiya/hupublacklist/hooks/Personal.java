@@ -13,8 +13,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import cn.amamiya.hupublacklist.utils.FileHelper;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -46,8 +49,15 @@ public class Personal implements IHook{
                         Activity personalActivity = (Activity) param.thisObject;
 
 
-                        SharedPreferences sharedPreferences = personalActivity.getSharedPreferences("blockusers", Context.MODE_PRIVATE);
-                        String blockUsersString = sharedPreferences.getString("blockusers", "");
+                        // 获取目标应用程序的外部文件目录
+                        File externalFilesDir = personalActivity.getExternalFilesDir(null);
+                        if (externalFilesDir == null) {
+                            Toast.makeText(personalActivity,"获取数据目录出错，可以尝试重装APP",Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        File blacklist = new File(externalFilesDir, "blacklist.txt");
+                        String blockUsersString = FileHelper.readFileToString(blacklist);
+
                         List<String> list = blockUsersString.isEmpty()?new ArrayList<>():new ArrayList<>(Arrays.asList(blockUsersString.split(",")));
 
                         XposedBridge.log("[HPBlack] listString"+blockUsersString);
@@ -74,15 +84,14 @@ public class Personal implements IHook{
                                             public void onClick(DialogInterface dialog, int which) {
                                                 if (textView.getCurrentTextColor() == Color.RED) {
                                                     XposedBridge.log(userName + " 被取消拉黑");
-                                                    list.remove(userName);
-                                                    sharedPreferences.edit().putString("blockusers",String.join(",",list)).apply();
+                                                    list.remove(userName.trim());
                                                     textView.setTextColor(Color.BLACK);
                                                 } else {
                                                     XposedBridge.log(userName+" 被拉黑");
-                                                    list.add(userName);
-                                                    sharedPreferences.edit().putString("blockusers",String.join(",",list)).apply();
+                                                    list.add(userName.trim());
                                                     textView.setTextColor(Color.RED);
                                                 }
+                                                FileHelper.modifyFileContent(blacklist,String.join(",",list));
                                             }
                                         })
                                         .setNegativeButton("否", new DialogInterface.OnClickListener() {
