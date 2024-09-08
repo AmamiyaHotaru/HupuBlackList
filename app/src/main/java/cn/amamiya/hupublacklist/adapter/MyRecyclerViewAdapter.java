@@ -14,16 +14,22 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.List;
+
+import cn.amamiya.hupublacklist.utils.FileHelper;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
     private Context context;
     private List<String> dataList;
 
-    public MyRecyclerViewAdapter(Context context, List<String> dataList) {
+    private File file;
+
+    public MyRecyclerViewAdapter(Context context, List<String> dataList, File file) {
         this.context = context;
         this.dataList = dataList;
+        this.file = file;
     }
 
     @NonNull
@@ -50,8 +56,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                         // 在这里执行删除操作
                         dataList.remove(currentPosition);
                         notifyDataSetChanged();
-                        SharedPreferences sharedPreferences = context.getSharedPreferences("blockusers", Context.MODE_PRIVATE);
-                        sharedPreferences.edit().putString("blockusers",String.join(",",dataList)).apply();
+                        String blackList = String.join(",",dataList);
+                        FileHelper.modifyFileContent(file,blackList);
                     }
                 });
                 builder.setNegativeButton("否", new DialogInterface.OnClickListener() {

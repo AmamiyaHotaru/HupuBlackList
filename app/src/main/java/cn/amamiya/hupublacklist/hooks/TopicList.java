@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import cn.amamiya.hupublacklist.utils.FileHelper;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -45,8 +48,16 @@ public class TopicList implements IHook{
                         activityField.setAccessible(true);
                         Activity activity = (Activity) activityField.get(topicListDispatcher);
 
-                        SharedPreferences sharedPreferences = activity.getSharedPreferences("blockusers", Context.MODE_PRIVATE);
-                        String blockUsersString = sharedPreferences.getString("blockusers", "");
+                        // 获取目标应用程序的外部文件目录
+                        File externalFilesDir = activity.getExternalFilesDir(null);
+                        if (externalFilesDir == null) {
+                            Toast.makeText(activity,"获取数据目录出错，可以尝试重装APP",Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        File blacklist = new File(externalFilesDir, "blacklist.txt");
+                        String blockUsersString = FileHelper.readFileToString(blacklist);
+
                         List<String> list = new ArrayList<>(Arrays.asList(blockUsersString.split(",")));
 
                         Class<?> aClass = param.args[0].getClass();

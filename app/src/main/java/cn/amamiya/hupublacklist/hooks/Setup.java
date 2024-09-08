@@ -9,16 +9,19 @@ import android.content.SharedPreferences;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import cn.amamiya.hupublacklist.adapter.MyRecyclerViewAdapter;
+import cn.amamiya.hupublacklist.utils.FileHelper;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -47,9 +50,15 @@ public class Setup implements IHook{
                         Constructor<?> constructor = itemClass.getConstructor(Context.class, String.class);
                         Object setupSingleView = constructor.newInstance(setupActivity, "黑名单");
                         ViewGroup setupSingleView1 = (ViewGroup) setupSingleView;
+                        // 获取目标应用程序的外部文件目录
+                        File externalFilesDir = setupActivity.getExternalFilesDir(null);
+                        if (externalFilesDir == null) {
+                            Toast.makeText(setupActivity,"获取数据目录出错，可以尝试重装APP",Toast.LENGTH_LONG).show();
+                            return;
+                        }
 
-                        SharedPreferences sharedPreferences = setupActivity.getSharedPreferences("blockusers", Context.MODE_PRIVATE);
-                        String blockUsersString = sharedPreferences.getString("blockusers", "");
+                        File blacklist = new File(externalFilesDir, "blacklist.txt");
+                        String blockUsersString = FileHelper.readFileToString(blacklist);
 
                         List<String> list = blockUsersString.isEmpty()?new ArrayList<>():new ArrayList<>(Arrays.asList(blockUsersString.split(",")));
 
@@ -64,7 +73,7 @@ public class Setup implements IHook{
                                 // 创建 RecyclerView
                                 RecyclerView recyclerView = new RecyclerView(setupActivity);
                                 recyclerView.setLayoutManager(new LinearLayoutManager(setupActivity));
-                                recyclerView.setAdapter(new MyRecyclerViewAdapter(setupActivity,list));
+                                recyclerView.setAdapter(new MyRecyclerViewAdapter(setupActivity,list,blacklist));
 
                                 // 将 RecyclerView 添加到布局中
                                 layout.addView(recyclerView);
