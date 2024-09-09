@@ -33,7 +33,7 @@
 
 ### ②点击“我的”导航栏右上角的设置按钮，进入设置界面，点击“黑名单”菜单项进入黑名单管理界面，点击屏蔽词进行屏蔽词管理。
 
-<img src="https://github.com/AmamiyaHotaru/HupuBlackList/blob/main/img/Screenshot_20240409_183459.jpg" alt="Image text" width="50%" />
+<img src="https://github.com/AmamiyaHotaru/HupuBlackList/blob/main/img/Screenshot_20240909_155202.jpg" alt="Image text" width="50%" />
 
 ### ③在黑名单管理界面长按可以对黑名单进行删除操作。
 
