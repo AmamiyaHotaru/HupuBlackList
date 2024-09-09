@@ -43,11 +43,11 @@ public class MainHook implements IXposedHookLoadPackage {
                 File externalFilesDir = context.getExternalFilesDir(null);
 
                 if (externalFilesDir != null) {
-                    // 在外部文件目录下创建一个名为 "test.txt" 的文件
-                    File newFile = new File(externalFilesDir, "blacklist.txt");
-                    if (!newFile.exists()) {
+                    // 在外部文件目录下创建一个名为 "blacklist.txt" 的文件
+                    File newblacklistFile = new File(externalFilesDir, "blacklist.txt");
+                    if (!newblacklistFile.exists()) {
                         try {
-                            boolean created = newFile.createNewFile();
+                            boolean created = newblacklistFile.createNewFile();
                             if (created) {
                                 XposedBridge.log("[HPBlack]blacklist.txt 文件创建成功");
                             } else {
@@ -59,8 +59,22 @@ public class MainHook implements IXposedHookLoadPackage {
                     } else {
                         XposedBridge.log("[HPBlack]blacklist.txt 文件已存在，无需创建");
                     }
-
-
+                    // 在外部文件目录下创建一个名为 "keyword.txt" 的文件
+                    File newkeywordFile = new File(externalFilesDir, "keyword.txt");
+                    if (!newkeywordFile.exists()) {
+                        try {
+                            boolean created = newkeywordFile.createNewFile();
+                            if (created) {
+                                XposedBridge.log("[HPBlack]keyword.txt 文件创建成功");
+                            } else {
+                                XposedBridge.log("[HPBlack]keyword.txt 文件创建失败");
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        XposedBridge.log("[HPBlack]keyword.txt 文件已存在，无需创建");
+                    }
                 }
             }
         });

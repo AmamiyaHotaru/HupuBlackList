@@ -55,15 +55,23 @@ public class TopicList implements IHook{
                             return;
                         }
 
-                        File blacklist = new File(externalFilesDir, "blacklist.txt");
-                        String blockUsersString = FileHelper.readFileToString(blacklist);
+                        File blacklistFile = new File(externalFilesDir, "blacklist.txt");
+                        String blockUsersString = FileHelper.readFileToString(blacklistFile);
+                        List<String> blackList = new ArrayList<>(Arrays.asList(blockUsersString.split(",")));
 
-                        List<String> list = new ArrayList<>(Arrays.asList(blockUsersString.split(",")));
+                        File keywordListFile = new File(externalFilesDir, "keyword.txt");
+                        String keywordString = FileHelper.readFileToString(keywordListFile);
+                        List<String> keywordList = new ArrayList<>(Arrays.asList(keywordString.split(",")));
 
                         Class<?> aClass = param.args[0].getClass();
                         Method getNickname = aClass.getMethod("component22");
                         String userName = (String) getNickname.invoke(param.args[0]);
-                        if (list.contains(userName)){
+
+                        Method getTitle = aClass.getMethod("component17");
+                        String title = (String) getTitle.invoke(param.args[0]);
+
+
+                        if (blackList.contains(userName)||(keywordList.stream().anyMatch(keyword -> !keyword.trim().isEmpty() && title.contains(keyword.trim())))){
                                 // 获取 itemView
                                 View itemView = (View) XposedHelpers.getObjectField(param.thisObject, "itemView");
                                 // 隐藏
