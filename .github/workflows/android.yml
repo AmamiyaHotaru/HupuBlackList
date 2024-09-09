@@ -12,14 +12,6 @@ on:
     # 忽略的标签类型，不触发构建流程(和tags不能同时写)
     # tags-ignore:
     #   - "d*"
-
-# strategy:
-  # 矩阵使用: ${{ matrix.os }}
-  # 下面两个矩阵，会代码就会执行 2 * 3 = 6次
-  # matrix:
-  #  os: [ubuntu-16.04, ubuntu-18.04]
-  #  node: [6, 8, 10]
-
 # 一次持续集成的运行，可以完成多个任务(下面就build)
 jobs:
   builds:
