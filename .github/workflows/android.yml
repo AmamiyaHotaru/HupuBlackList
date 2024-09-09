@@ -67,7 +67,7 @@ jobs:
 
       # 重命名apk
       # GITHUB_REF_NAME是“触发workflow的分支或tag名称”
-      - run: mv ${{steps.sign_app.outputs.signedReleaseFile}} fundark_$GITHUB_REF_NAME.apk
+      - run: mv ${{steps.sign_app.outputs.signedReleaseFile}} app_$GITHUB_REF_NAME.apk
         # 可以指定shell命令的执行目录
         # working-directory: ./temp
         # 只当shell的类型
@@ -76,6 +76,6 @@ jobs:
       # 发布
       - uses: ncipollo/release-action@v1
         with:
-          artifacts: "fundark_$GITHUB_REF_NAME.apk"  # 要包含到 Release Assets 中的文件，这里指定了你重命名后的 APK 文件
-          token: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub 提供的 token
+          artifacts: "app_$GITHUB_REF_NAME.apk"  # 要包含到 Release Assets 中的文件，这里指定了你重命名后的 APK 文件
+          token: ${{ secrets.TOKEN }}  # 使用 GitHub 提供的 token
           generateReleaseNotes: true  # 自动生成一些变化列表之类的内容
