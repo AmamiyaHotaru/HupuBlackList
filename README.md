@@ -16,8 +16,8 @@
 ## 已实现功能
 - [x] 隐藏拉黑用户的专区发帖
 - [x] 折叠拉黑用户的专区回复
+- [x] 关键词屏蔽
 - [ ] 隐藏拉黑用户的首页推荐
-- [ ] 关键词屏蔽
 
 ## 安装
 ### :warning: 未ROOT用户使用需要卸载旧的虎扑 :warning:
@@ -31,7 +31,7 @@
 
 <img src="https://github.com/AmamiyaHotaru/HupuBlackList/blob/main/img/Screenshot_20240409_183445.jpg" alt="Image text" width="50%" />
 
-### ②点击“我的”导航栏右上角的设置按钮，进入设置界面，点击“黑名单”菜单项进入黑名单管理界面。
+### ②点击“我的”导航栏右上角的设置按钮，进入设置界面，点击“黑名单”菜单项进入黑名单管理界面，点击屏蔽词进行屏蔽词管理。
 
 <img src="https://github.com/AmamiyaHotaru/HupuBlackList/blob/main/img/Screenshot_20240409_183459.jpg" alt="Image text" width="50%" />
 
